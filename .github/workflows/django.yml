@@ -30,4 +30,4 @@ jobs:
         python app/manage.py test
     - name: run flake8
       run: |
-        flake8
+        cd app/ && flake8
