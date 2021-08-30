@@ -8,7 +8,9 @@ class TestModel(TestCase):
         """Test creating model with an email and password"""
         email = 'foo@bazzbar.com'
         password = 'test123456'
-        user = get_user_model().objects.create_user(email=email, password=password)
+        user = get_user_model().objects.create_user(
+            email=email, password=password
+        )
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
@@ -16,7 +18,9 @@ class TestModel(TestCase):
     def test_email_is_normalized(self):
         """Test email is normalized after user creation"""
         email = 'foo@BYZZ.COM'
-        user = get_user_model().objects.create_user(email=email, password='ere')
+        user = get_user_model().objects.create_user(
+            email=email, password='ere'
+        )
         self.assertEqual(user.email, email.lower())
 
     def test_user_email_is_invalid(self):
