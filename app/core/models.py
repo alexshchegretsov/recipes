@@ -4,15 +4,22 @@ from django.contrib.auth.models import PermissionsMixin
 
 
 class UserManager(BaseUserManager):
-
     def create_user(self, email: str, password: str = None, **extra_fields):
         """Creates and saves a new user"""
         if not email:
-            raise ValueError('User must provide an email address')
+            raise ValueError("User must provide an email address")
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email: str, password: str = None):
+        """Creates superuser and saved"""
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.is_staff = True
         user.save(using=self._db)
         return user
 
@@ -24,4 +31,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
